@@ -32,8 +32,8 @@
       setInterval(()=>{
           if(navigator.geolocation){
           navigator.geolocation.getCurrentPosition((position)=>{
-            LAT = position.coords.latitude;
-            LNG = position.coords.longitude;
+            LAT = parseFloat(position.coords.latitude);
+            LNG = parseFloat(position.coords.longitude);
           });
         }
       },3000);
@@ -42,7 +42,8 @@
       function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
           center: {lat: 23, lng: 120.215},
-          zoom: 15
+          zoom: 18,
+          disableDefaultUI: true
         });
 
         // Try HTML5 geolocation.
@@ -77,21 +78,9 @@
         maker.open(map);
       }
       
-      function getLocation(){
-        if(navigator.geolocation){
-          navigator.geolocation.getCurrentPosition((position)=>{
-            $('#lat-info').html(position.coords.latitude);
-            $('#lng-info').html(position.coords.longitude);
-          });
-        } else {
-          // $('#lat-info').html(position.coords.latitude);
-          $('#lat-info').html('123');
-        }
-      }
-
       setInterval(()=>{
-        getLocation();
-        console.log(1);
+        $('#lat-info').html(LAT);
+        $('#lng-info').html(LNG);
       },3000);
       
     </script>
