@@ -8,7 +8,7 @@
       /* Always set the map height explicitly to define the size of the div
        * element that contains the map. */
       #map {
-        height: 100%;
+        height: 50%;
       }
       /* Optional: Makes the sample page fill the window. */
       html, body {
@@ -20,6 +20,11 @@
   </head>
   <body>
     <div id="map"></div>
+    <div id="detail">
+      <p id="lat-info"></p>
+      <p id="lng-info"></p>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.js" integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60=" crossorigin="anonymous"></script>
     <script>
       function initMap() {
         var map = new google.maps.Map(document.getElementById('map'), {
@@ -40,28 +45,41 @@
               map: map,
               title:"Hello World!"
             });
-            
-            // var infoWindow = new google.maps.InfoWindow;
-            // infoWindow.setPosition(pos);
-            // infoWindow.setContent('Hello');
-            // infoWindow.open(map);
+
             map.setCenter(pos);
           }, function() {
-            handleLocationError(true, infoWindow, map.getCenter());
+            handleLocationError(true, maker, map.getCenter());
           });
         } else {
           // Browser doesn't support Geolocation
-          handleLocationError(false, infoWindow, map.getCenter());
+          handleLocationError(false, marker, map.getCenter());
         }
       }
 
-      function handleLocationError(browserHasGeolocation, infoWindow, pos) {
-        infoWindow.setPosition(pos);
-        infoWindow.setContent(browserHasGeolocation ?
+      function handleLocationError(browserHasGeolocation, maker, pos) {
+        maker.setPosition(pos);
+        maker.setContent(browserHasGeolocation ?
                               'Error: The Geolocation service failed.' :
                               'Error: Your browser doesn\'t support geolocation.');
-        infoWindow.open(map);
+        maker.open(map);
       }
+      
+      function getLocation(){
+        if(navigator.geolocation){
+          navigator.geolocation.getCurrentPosition((position)=>{
+            $('#lat-info').html(position.coords.latitude);
+            $('#lng-info').html(position.coords.longitude);
+          });
+        } else {
+          // $('#lat-info').html(position.coords.latitude);
+          $('#lat-info').html('123');
+        }
+      }
+
+      setInterval(()=>{
+        getLocation();
+        console.log(1);
+      },3000);
       
     </script>
     <script async defer
